@@ -4,6 +4,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <vector>
 using namespace std;
 class PasswordGenerator{
 private:
@@ -17,6 +18,10 @@ private:
 	//generates a random ASCII character
 	int randomASCIIChar(int start, int end){
 		return (start + rand() % (end - start + 1));
+	}
+
+	int randomEvenNumber(int start, int end){
+		return (start + rand() % (end - start + 1) / 2) * 2;
 	}
 
 	//Getters
@@ -76,57 +81,46 @@ public:
 			setLength(len);
 		}
 	}
+	//This function recursively works for every digit of the password
+	void generateNthDigit(int digit, vector<int> &interval, int &temp){
+		//Be sure that the digit is not the end of the password
+		if(digit < this->length){
+			//Mode 1 means there are only numbers in the password
+			if(this->mode == 1){
+				//ASCII interval for numbers, think it is like they are grouped by every 2 numbers
+				interval={48,57};
+				this->password += randomASCIIChar(interval[0],interval[1]);
+			}
+			//Mode 2 means there are numbers, uppercase and lowercase letters
+			else if(this->mode == 2){
+				//ASCII interval for numbers, uppercase and lowercase letters
+				interval={48,57,65,90,97,122};
+				//There are 6 number in interval so randomly choose an even number from 0 to 4 which will be the starting index of the interval
+				temp = randomEvenNumber(0,4);
+				//Accept temp as the starting index of the interval and add 1 to it to get the ending index of the interval
+				this->password += randomASCIIChar(interval[temp],interval[temp+1]);
+			}
+			//Mode 3 means there are numbers, uppercase and lowercase letters and special characters
+			else if(this->mode == 3){
+				//ASCII interval for numbers, uppercase and lowercase letters and special characters, think it is like they are grouped by every 2 numbers
+				interval={48,57,65,90,97,122,33,47};
+				//There are 8 numbers in interval so randomly choose an even number from 0 to 6 which will be the starting index of the interval
+				temp = randomEvenNumber(0,6);
+				//Accept temp as the starting index of the interval and add 1 to it to get the ending index of the interval
+				this->password += randomASCIIChar(interval[temp],interval[temp+1]);
+			}
+			//Call the function again to generate the next digit
+			generateNthDigit(digit+1, interval, temp);
+		}
+	}
 
 	void generate(){
 		srand(time(NULL));
 		this->password.reserve(this->length);
-		char chr = NULL;
-		short temp = NULL;
-
-		if (this->mode == 1){
-			for (int i = 0; i < this->length; ++i) {
-				chr = randomASCIIChar(48,57);
-				this->password += chr;
-			}
-		}
-		else if (this->mode == 2){
-			for (int i = 0; i < this->length; ++i) {
-				temp = randomASCIIChar(48,50) - 48;
-				if (temp == 0){
-					chr = randomASCIIChar(48,57);
-					this->password += chr;
-				}
-				else if (temp == 1){
-					chr = randomASCIIChar(65,90);
-					this->password += chr;
-				}
-				else if (temp == 2){
-					chr = randomASCIIChar(97,122);
-					this->password += chr;
-				}
-			}
-		}
-		else if (this->mode == 3){
-			for (int i = 0; i < this->length; ++i) {
-				temp = randomASCIIChar(48,51) - 48;
-				if (temp == 0){
-					chr = randomASCIIChar(48,57);
-					this->password += chr;
-				}
-				else if (temp == 1){
-					chr = randomASCIIChar(65,90);
-					this->password += chr;
-				}
-				else if (temp == 2){
-					chr = randomASCIIChar(97,122);
-					this->password += chr;
-				}
-				else if (temp == 3){
-					chr = randomASCIIChar(33,47);
-					this->password += chr;
-				}
-			}
-		}
+		//Vector that holds the ASCII interval
+		vector<int> interval={0,0};
+		int temp = 0;
+		generateNthDigit(0, interval,temp);
 	}
 
 	void printPassword(){

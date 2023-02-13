@@ -35,7 +35,7 @@ private:
 				interval={48,57};
 				this->password += randomASCIIChar(interval[0],interval[1]);
 			}
-				//Mode 2 means there are numbers, uppercase and lowercase letters
+			//Mode 2 means there are numbers, uppercase and lowercase letters
 			else if(this->mode == 2){
 				//ASCII interval for numbers, uppercase and lowercase letters, think it is like they are grouped by every 2 numbers
 				interval={48,57,65,90,97,122};
@@ -44,7 +44,7 @@ private:
 				//Accept temp as the starting index of the interval and add 1 to it to get the ending index of the interval
 				this->password += randomASCIIChar(interval[temp],interval[temp+1]);
 			}
-				//Mode 3 means there are numbers, uppercase and lowercase letters and special characters
+			//Mode 3 means there are numbers, uppercase and lowercase letters and special characters
 			else if(this->mode == 3){
 				//ASCII interval for numbers, uppercase and lowercase letters and special characters, think it is like they are grouped by every 2 numbers
 				interval={48,57,65,90,97,122,33,47};
@@ -61,15 +61,21 @@ public:
 	//CONSTRUCTORS
 	PasswordGenerator(){
 		this->password = "";
-		this->mode = 0;
 		this->length = 0;
+		this->mode = 0;
+	}
+
+	PasswordGenerator(unsigned long long int length, unsigned short mode){
+		this->password = "";
+		this->length = length;
+		this->mode = mode;
 	}
 
 	//DESTRUCTOR
 	~PasswordGenerator(){
 		this->password.clear();
-		this->mode = 0;
 		this->length = 0;
+		this->mode = 0;
 	}
 
 	///////PUBLIC METHODS//////

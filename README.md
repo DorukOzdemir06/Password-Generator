@@ -11,7 +11,8 @@ A simple password generator that generates a password of a given length with num
 In the first scenario, just copy the all files from the repository and run the main.cpp file.
 Application will start running on the terminal and will ask for the length and difficulty of the password to be generated.
 Then, application will generate a password of the given length and difficulty and will print it on the terminal.
----
+
+
 In the second scenario, where you may want to implement our password generator in your code directly, you can do it by following the steps below:
 1. Copy the `PasswordGenerator.hpp` file from the repository.
 2. Include the file in your project.
